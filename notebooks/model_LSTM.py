@@ -25,8 +25,8 @@ with open('Resultats_LSTM.txt', 'w') as archivo:
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=777, stratify=y)
     
     # Definir las combinaciones posibles
-    scalers = [StandardScaler(), MinMaxScaler()]
-    activations = ['sigmoid', 'relu', 'tanh']
+    scalers = [StandardScaler()]
+    activations = ['sigmoid']
     losses = ['binary_crossentropy']
     optimizers = ['adam', 'sgd', 'RMSprop']
     metrics = ['accuracy']
@@ -52,10 +52,16 @@ with open('Resultats_LSTM.txt', 'w') as archivo:
         model.compile(loss=loss, optimizer=optimizer, metrics=[metric])
     
         # Entrenar
-        model.fit(X_train_reshaped, y_train, class_weight=class_weights, epochs=5, batch_size=32, validation_data=(X_test_reshaped, y_test))
+        history = model.fit(X_train_reshaped, y_train, class_weight=class_weights, epochs=5, batch_size=32, validation_data=(X_test_reshaped, y_test))
     
         # Evaluar
-        _, accuracy = model.evaluate(X_test_reshaped, y_test, batch_size=32)
+        loss, accuracy = model.evaluate(X_test_reshaped, y_test, batch_size=32)
+        print("accuracy")
+        print(accuracy)
+        print(history.history['accuracy'])
+        print("loss")
+        print(loss)
+        print(history.history['loss'])
         return accuracy
     
     # Búsqueda en cuadrícula
